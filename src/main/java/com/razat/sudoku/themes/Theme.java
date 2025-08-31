@@ -9,4 +9,6 @@ public interface Theme {
     Color getMessageForeground();
     Color getButtonBackground();
     Color getButtonForeground();
+    Color getSliderBackground();
+    Color getSliderForeground();
 }

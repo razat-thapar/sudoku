@@ -13,4 +13,10 @@ public class DarkTheme implements Theme {
     public Color getMessageForeground() { return DARK_MESSAGE_TEXT; }
     public Color getButtonBackground() { return DARK_BUTTON_BG; }
     public Color getButtonForeground() { return DARK_BUTTON_TEXT; }
+    public Color getSliderBackground() {
+        return DARK_SLIDER_BG;
+    }
+    public Color getSliderForeground() {
+        return DARK_SLIDER_TEXT;
+    }
 }

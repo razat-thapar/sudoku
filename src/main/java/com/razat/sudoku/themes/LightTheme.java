@@ -13,4 +13,10 @@ public class LightTheme implements Theme {
     public Color getMessageForeground() { return MESSAGE_TEXT_COLOR; }
     public Color getButtonBackground() { return BUTTON_RESET_BG; }
     public Color getButtonForeground() { return BUTTON_TEXT_COLOR; }
+    public Color getSliderBackground() {
+        return SLIDER_TRACK_COLOR;
+    }
+    public Color getSliderForeground() {
+        return SLIDER_TEXT_COLOR;
+    }
 }

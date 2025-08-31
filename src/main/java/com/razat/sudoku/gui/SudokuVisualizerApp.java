@@ -18,11 +18,12 @@ public class SudokuVisualizerApp extends JFrame {
     private char[][] initialBoard;
     private boolean isDarkMode = false;
     private Theme currentTheme = ThemeFactory.getTheme(false);
+    private int currentDelay = DEFAULT_VISUALIZER_DELAY_MS;
 
     public SudokuVisualizerApp(char[][] board, ActionListener startAction, ActionListener stopAction) {
         this.initialBoard = deepCopyBoard(board);
         setTitle(APP_TITLE);
-        setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE + 100);
+        setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE + 150);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -79,6 +80,7 @@ public class SudokuVisualizerApp extends JFrame {
         buttonPanel.add(resetButton);
         buttonPanel.add(exitButton);
         buttonPanel.add(toggleThemeButton);
+        buttonPanel.add(createSpeedSliderPanel());
 
         return buttonPanel;
     }
@@ -91,6 +93,30 @@ public class SudokuVisualizerApp extends JFrame {
         button.addActionListener(action);
         return button;
     }
+
+    private JPanel createSpeedSliderPanel() {
+        JPanel sliderPanel = new JPanel();
+
+        JLabel speedLabel = new JLabel("Speed (ms):");
+        speedLabel.setFont(BUTTON_FONT);
+        speedLabel.setForeground(currentTheme.getSliderForeground());
+        speedLabel.setBackground(currentTheme.getSliderBackground());
+
+        JSlider speedSlider = new JSlider(MIN_VISUALIZER_DELAY_MS, MAX_VISUALIZER_DELAY_MS, DEFAULT_VISUALIZER_DELAY_MS);
+        speedSlider.setMajorTickSpacing(250);
+        speedSlider.setMinorTickSpacing(50);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        speedSlider.setPreferredSize(new Dimension(200, 50));
+        speedSlider.setToolTipText("Adjust animation speed");
+        speedSlider.addChangeListener(e -> currentDelay = speedSlider.getValue());
+
+        sliderPanel.add(speedLabel);
+        sliderPanel.add(speedSlider);
+
+        return sliderPanel;
+    }
+
 
     private void toggleTheme() {
         isDarkMode = !isDarkMode;
@@ -138,7 +164,7 @@ public class SudokuVisualizerApp extends JFrame {
     public void visualizeStep(char[][] board) {
         updateBoard(board);
         try {
-            Thread.sleep(AppConfig.VISUALIZER_DELAY_MS);
+            Thread.sleep(currentDelay);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

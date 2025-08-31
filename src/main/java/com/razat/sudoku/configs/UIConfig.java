@@ -19,6 +19,8 @@ public class UIConfig {
     public static final Color BUTTON_RESET_BG = new Color(33, 150, 243);
     public static final Color BUTTON_EXIT_BG = new Color(117, 117, 117);
     public static final Color BUTTON_TEXT_COLOR = Color.WHITE;
+    public static final Color SLIDER_TRACK_COLOR = new Color(200, 200, 200);
+    public static final Color SLIDER_TEXT_COLOR = Color.BLACK;
 
     // Dark Mode
     public static final Color DARK_CELL_BG = new Color(40, 44, 52);
@@ -30,4 +32,7 @@ public class UIConfig {
 
     public static final Color DARK_BUTTON_BG = new Color(60, 63, 65);
     public static final Color DARK_BUTTON_TEXT = new Color(220, 220, 220);
+
+    public static final Color DARK_SLIDER_BG = new Color(60, 63, 65);
+    public static final Color DARK_SLIDER_TEXT = new Color(220, 220, 220);
 }

@@ -3,7 +3,9 @@ package com.razat.sudoku.configs;
 public class AppConfig {
     public static final boolean ENABLE_VISUALIZER = true;
     public static final String APP_TITLE = "Sudoku Visualizer";
-    public static final int VISUALIZER_DELAY_MS = 1; // Delay in milliseconds for visualization steps
+    public static final int DEFAULT_VISUALIZER_DELAY_MS = 50; // Default Delay in milliseconds for visualization steps
+    public static final int MIN_VISUALIZER_DELAY_MS = 1; // Min Delay in milliseconds for visualization steps
+    public static final int MAX_VISUALIZER_DELAY_MS = 1000; // Maximum delay for visualization
     public static final int SIZE = 9;
     public static final int CELL_SIZE = 60;
     public static final char EMPTY_CELL = '.';
