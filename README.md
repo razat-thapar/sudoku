@@ -22,7 +22,7 @@ The application now includes a graphical user interface built with **Java Swing*
 - Responsive layout and intuitive design
 
 ### 🧪 DEMO
-[![Watch the demo](path/to/thumbnail.jpg)](path/to/video.mp4)
+[Watch the Sudoku Demo](https://raw.githubusercontent.com/razat-thapar/sudoku/master/SudokuDemo.mp4)
 
 > *(Add a screenshot here if available)*
 
