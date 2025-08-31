@@ -22,9 +22,11 @@ The application now includes a graphical user interface built with **Java Swing*
 - Responsive layout and intuitive design
 
 ### 🧪 DEMO
-[Watch the Sudoku Demo](https://raw.githubusercontent.com/razat-thapar/sudoku/master/SudokuDemo.mp4)
+[![Watch the demo](https://raw.githubusercontent.com/razat-thapar/sudoku/master/thumbnail.jpg)](https://raw.githubusercontent.com/razat-thapar/sudoku/master/SudokuDemo.mp4)
 
-> *(Add a screenshot here if available)*
+> *Screenshot*
+<img width="1061" height="691" alt="image" src="https://github.com/user-attachments/assets/c8607545-4ccb-4abb-a40a-254bc2169183" />
+
 
 ## 📁 Project Structure
 
