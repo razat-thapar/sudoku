@@ -1,13 +1,12 @@
-package com.razat.sudoku.Runner;
+package com.razat.sudoku;
 
-import com.razat.sudoku.Sudoku9;
-import com.razat.sudoku.SudokuVisualizerApp;
+import com.razat.sudoku.algorithms.Sudoku9;
+import com.razat.sudoku.gui.SudokuVisualizerApp;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static com.razat.sudoku.AppConfig.*;
+import static com.razat.sudoku.configs.AppConfig.*;
 
 public class Runner {
     private Thread solverThread;

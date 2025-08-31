@@ -1,17 +1,23 @@
-package com.razat.sudoku;
+package com.razat.sudoku.gui;
+
+import com.razat.sudoku.configs.AppConfig;
+import com.razat.sudoku.factories.ThemeFactory;
+import com.razat.sudoku.themes.Theme;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static com.razat.sudoku.AppConfig.*;
-import static com.razat.sudoku.UIConfig.*;
+import static com.razat.sudoku.configs.AppConfig.*;
+import static com.razat.sudoku.configs.UIConfig.*;
 
 public class SudokuVisualizerApp extends JFrame {
     private JTextField[][] cells = new JTextField[SIZE][SIZE];
-    private JButton startButton, stopButton, resetButton, exitButton;
-    private char[][] initialBoard;
+    private JButton startButton, stopButton, resetButton, exitButton, toggleThemeButton;
     private JLabel messageLabel;
+    private char[][] initialBoard;
+    private boolean isDarkMode = false;
+    private Theme currentTheme = ThemeFactory.getTheme(false);
 
     public SudokuVisualizerApp(char[][] board, ActionListener startAction, ActionListener stopAction) {
         this.initialBoard = deepCopyBoard(board);
@@ -39,14 +45,8 @@ public class SudokuVisualizerApp extends JFrame {
                 char value = board[row][col];
                 cell.setText(value == EMPTY_CELL ? "" : String.valueOf(value));
                 cell.setEditable(true);
-                cell.setForeground(CELL_TEXT_COLOR);
-                cell.setBackground(CELL_BG_COLOR);
-
-                int gridRow = row / 3;
-                int gridCol = col / 3;
-                if ((gridRow + gridCol) % 2 == 0) {
-                    cell.setBackground(SUBGRID_BG_COLOR);
-                }
+                cell.setForeground(currentTheme.getCellForeground());
+                cell.setBackground(currentTheme.getCellBackground(row, col));
 
                 cells[row][col] = cell;
                 gridPanel.add(cell);
@@ -59,8 +59,8 @@ public class SudokuVisualizerApp extends JFrame {
         messageLabel = new JLabel(MESSAGE_WELCOME, SwingConstants.CENTER);
         messageLabel.setFont(MESSAGE_FONT);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        messageLabel.setForeground(MESSAGE_TEXT_COLOR);
-        messageLabel.setBackground(MESSAGE_BG_COLOR);
+        messageLabel.setForeground(currentTheme.getMessageForeground());
+        messageLabel.setBackground(currentTheme.getMessageBackground());
         messageLabel.setOpaque(true);
         return messageLabel;
     }
@@ -68,26 +68,52 @@ public class SudokuVisualizerApp extends JFrame {
     private JPanel createButtonPanel(ActionListener startAction, ActionListener stopAction) {
         JPanel buttonPanel = new JPanel();
 
-        startButton = createStyledButton("Start", BUTTON_START_BG, startAction);
-        stopButton = createStyledButton("Stop", BUTTON_STOP_BG, stopAction);
-        resetButton = createStyledButton("Reset", BUTTON_RESET_BG, e -> resetBoard());
-        exitButton = createStyledButton("Exit", BUTTON_EXIT_BG, e -> System.exit(0));
+        startButton = createStyledButton("Start", startAction);
+        stopButton = createStyledButton("Stop", stopAction);
+        resetButton = createStyledButton("Reset", e -> resetBoard());
+        exitButton = createStyledButton("Exit", e -> System.exit(0));
+        toggleThemeButton = createStyledButton("Dark Mode", e -> toggleTheme());
 
         buttonPanel.add(startButton);
         buttonPanel.add(stopButton);
         buttonPanel.add(resetButton);
         buttonPanel.add(exitButton);
+        buttonPanel.add(toggleThemeButton);
 
         return buttonPanel;
     }
 
-    private JButton createStyledButton(String text, Color bgColor, ActionListener action) {
+    private JButton createStyledButton(String text, ActionListener action) {
         JButton button = new JButton(text);
         button.setFont(BUTTON_FONT);
-        button.setBackground(bgColor);
-        button.setForeground(BUTTON_TEXT_COLOR);
+        button.setBackground(currentTheme.getButtonBackground());
+        button.setForeground(currentTheme.getButtonForeground());
         button.addActionListener(action);
         return button;
+    }
+
+    private void toggleTheme() {
+        isDarkMode = !isDarkMode;
+        currentTheme = ThemeFactory.getTheme(isDarkMode);
+        toggleThemeButton.setText(isDarkMode ? "Light Mode" : "Dark Mode");
+
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                JTextField cell = cells[row][col];
+                cell.setBackground(currentTheme.getCellBackground(row, col));
+                cell.setForeground(currentTheme.getCellForeground());
+            }
+        }
+
+        messageLabel.setBackground(currentTheme.getMessageBackground());
+        messageLabel.setForeground(currentTheme.getMessageForeground());
+
+        for (JButton btn : new JButton[]{startButton, stopButton, resetButton, exitButton, toggleThemeButton}) {
+            btn.setBackground(currentTheme.getButtonBackground());
+            btn.setForeground(currentTheme.getButtonForeground());
+        }
+
+        repaint();
     }
 
     private void resetBoard() {

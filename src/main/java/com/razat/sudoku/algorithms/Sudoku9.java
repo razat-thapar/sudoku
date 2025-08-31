@@ -1,8 +1,10 @@
-package com.razat.sudoku;
+package com.razat.sudoku.algorithms;
 
-import static com.razat.sudoku.AppConfig.EMPTY_CELL;
-import static com.razat.sudoku.AppConfig.SIZE;
-import static com.razat.sudoku.AppConfig.DIGITS;
+import com.razat.sudoku.gui.SudokuVisualizerApp;
+
+import static com.razat.sudoku.configs.AppConfig.EMPTY_CELL;
+import static com.razat.sudoku.configs.AppConfig.SIZE;
+import static com.razat.sudoku.configs.AppConfig.DIGITS;
 
 
 public class Sudoku9 {
