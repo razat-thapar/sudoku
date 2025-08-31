@@ -1,7 +1,7 @@
 package com.razat.sudoku.gui;
 
-import com.razat.sudoku.configs.AppConfig;
 import com.razat.sudoku.factories.ThemeFactory;
+import com.razat.sudoku.sounds.SoundPlayer;
 import com.razat.sudoku.themes.Theme;
 
 import javax.swing.*;
@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import static com.razat.sudoku.configs.AppConfig.*;
+import static com.razat.sudoku.configs.SoundConfig.*;
 import static com.razat.sudoku.configs.UIConfig.*;
 
 public class SudokuVisualizerApp extends JFrame {
@@ -31,7 +32,7 @@ public class SudokuVisualizerApp extends JFrame {
         add(createMessageLabel(), BorderLayout.NORTH);
         add(createButtonPanel(startAction, stopAction), BorderLayout.SOUTH);
 
-        setVisible(true);
+        setVisible(ENABLE_VISUALIZER);
     }
 
     private JPanel createGridPanel(char[][] board) {
@@ -72,7 +73,7 @@ public class SudokuVisualizerApp extends JFrame {
         startButton = createStyledButton("Start", startAction);
         stopButton = createStyledButton("Stop", stopAction);
         resetButton = createStyledButton("Reset", e -> resetBoard());
-        exitButton = createStyledButton("Exit", e -> System.exit(0));
+        exitButton = createStyledButton("Exit", e -> exit());
         toggleThemeButton = createStyledButton("Dark Mode", e -> toggleTheme());
 
         buttonPanel.add(startButton);
@@ -119,6 +120,7 @@ public class SudokuVisualizerApp extends JFrame {
 
 
     private void toggleTheme() {
+        SoundPlayer.playSound(BUTTON_CLICK);
         isDarkMode = !isDarkMode;
         currentTheme = ThemeFactory.getTheme(isDarkMode);
         toggleThemeButton.setText(isDarkMode ? "Light Mode" : "Dark Mode");
@@ -143,6 +145,7 @@ public class SudokuVisualizerApp extends JFrame {
     }
 
     private void resetBoard() {
+        SoundPlayer.playSound(RESET_BOARD);
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 char val = initialBoard[row][col];
@@ -150,6 +153,16 @@ public class SudokuVisualizerApp extends JFrame {
             }
         }
         setMessage(MESSAGE_WELCOME);
+    }
+    private void exit(){
+        SoundPlayer.playSound(EXIT_SOUND);
+        setMessage(MESSAGE_GAME_OVER);
+        try {
+            Thread.sleep(3000); // Wait for the exit sound to play
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.exit(0);
     }
 
     public void updateBoard(char[][] board) {
@@ -163,6 +176,7 @@ public class SudokuVisualizerApp extends JFrame {
 
     public void visualizeStep(char[][] board) {
         updateBoard(board);
+        SoundPlayer.playSound(STEP_SOUND);
         try {
             Thread.sleep(currentDelay);
         } catch (InterruptedException e) {

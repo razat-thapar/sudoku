@@ -2,11 +2,14 @@ package com.razat.sudoku;
 
 import com.razat.sudoku.algorithms.Sudoku9;
 import com.razat.sudoku.gui.SudokuVisualizerApp;
+import com.razat.sudoku.sounds.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
 import static com.razat.sudoku.configs.AppConfig.*;
+import static com.razat.sudoku.configs.SoundConfig.ERROR_SOUND;
+import static com.razat.sudoku.configs.SoundConfig.SUCCESS_SOUND;
 
 public class Runner {
     private Thread solverThread;
@@ -17,8 +20,10 @@ public class Runner {
         visualizer.setMessage(MESSAGE_SOLVING);
         if (sudoku.solve(sudoku, 0, 0, visualizer)) {
             visualizer.setMessage(MESSAGE_SOLVED);
+            SoundPlayer.playSound(SUCCESS_SOUND);
         } else {
             visualizer.setMessage(MESSAGE_NO_SOLUTION);
+            SoundPlayer.playSound(ERROR_SOUND);
         }
 
     }

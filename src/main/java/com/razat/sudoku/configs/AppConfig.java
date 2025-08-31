@@ -4,7 +4,7 @@ public class AppConfig {
     public static final boolean ENABLE_VISUALIZER = true;
     public static final String APP_TITLE = "Sudoku Visualizer";
     public static final int DEFAULT_VISUALIZER_DELAY_MS = 50; // Default Delay in milliseconds for visualization steps
-    public static final int MIN_VISUALIZER_DELAY_MS = 1; // Min Delay in milliseconds for visualization steps
+    public static final int MIN_VISUALIZER_DELAY_MS = 0; // Min Delay in milliseconds for visualization steps
     public static final int MAX_VISUALIZER_DELAY_MS = 1000; // Maximum delay for visualization
     public static final int SIZE = 9;
     public static final int CELL_SIZE = 60;
@@ -15,4 +15,5 @@ public class AppConfig {
     public static final String MESSAGE_SOLVED = "Sudoku Solved!";
     public static final String MESSAGE_NO_SOLUTION = "No solution exists.";
     public static final String MESSAGE_WELCOME = "Welcome to Sudoku Solver";
+    public static final String MESSAGE_GAME_OVER = "Game Over!";
 }
