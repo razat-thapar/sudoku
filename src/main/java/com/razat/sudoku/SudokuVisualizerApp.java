@@ -5,73 +5,106 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import static com.razat.sudoku.AppConfig.*;
+import static com.razat.sudoku.UIConfig.*;
 
 public class SudokuVisualizerApp extends JFrame {
     private JTextField[][] cells = new JTextField[SIZE][SIZE];
-    private JButton startButton;
-    private JButton stopButton;
-    private JButton resetButton;
-    private JButton exitButton;
+    private JButton startButton, stopButton, resetButton, exitButton;
     private char[][] initialBoard;
     private JLabel messageLabel;
 
     public SudokuVisualizerApp(char[][] board, ActionListener startAction, ActionListener stopAction) {
         this.initialBoard = deepCopyBoard(board);
         setTitle(APP_TITLE);
-        setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE + 100); // Extra space for buttons
+        setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE + 100);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        add(createGridPanel(board), BorderLayout.CENTER);
+        add(createMessageLabel(), BorderLayout.NORTH);
+        add(createButtonPanel(startAction, stopAction), BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private JPanel createGridPanel(char[][] board) {
         JPanel gridPanel = new JPanel(new GridLayout(SIZE, SIZE));
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 JTextField cell = new JTextField();
                 cell.setHorizontalAlignment(JTextField.CENTER);
-                cell.setFont(new Font("Arial", Font.BOLD, 24));
+                cell.setFont(CELL_FONT);
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                cell.setText(board[row][col] == EMPTY_CELL ? "" : String.valueOf(board[row][col]));
+
+                char value = board[row][col];
+                cell.setText(value == EMPTY_CELL ? "" : String.valueOf(value));
+                cell.setEditable(true);
+                cell.setForeground(CELL_TEXT_COLOR);
+                cell.setBackground(CELL_BG_COLOR);
+
+                int gridRow = row / 3;
+                int gridCol = col / 3;
+                if ((gridRow + gridCol) % 2 == 0) {
+                    cell.setBackground(SUBGRID_BG_COLOR);
+                }
+
                 cells[row][col] = cell;
                 gridPanel.add(cell);
             }
         }
-        add(gridPanel, BorderLayout.CENTER);
+        return gridPanel;
+    }
+
+    private JLabel createMessageLabel() {
         messageLabel = new JLabel(MESSAGE_WELCOME, SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        messageLabel.setFont(MESSAGE_FONT);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        add(messageLabel, BorderLayout.NORTH);
+        messageLabel.setForeground(MESSAGE_TEXT_COLOR);
+        messageLabel.setBackground(MESSAGE_BG_COLOR);
+        messageLabel.setOpaque(true);
+        return messageLabel;
+    }
 
+    private JPanel createButtonPanel(ActionListener startAction, ActionListener stopAction) {
         JPanel buttonPanel = new JPanel();
-        startButton = new JButton("Start");
-        stopButton = new JButton("Stop");
-        resetButton = new JButton("Reset");
-        exitButton = new JButton("Exit");
 
-        startButton.addActionListener(startAction);
-        stopButton.addActionListener(stopAction);
-        exitButton.addActionListener(e -> System.exit(0));
-        resetButton.addActionListener(e -> {
-            for (int row = 0; row < SIZE; row++) {
-                for (int col = 0; col < SIZE; col++) {
-                    char val = initialBoard[row][col];
-                    cells[row][col].setText(val == '.' ? "" : String.valueOf(val));
-                }
-            }
-        });
+        startButton = createStyledButton("Start", BUTTON_START_BG, startAction);
+        stopButton = createStyledButton("Stop", BUTTON_STOP_BG, stopAction);
+        resetButton = createStyledButton("Reset", BUTTON_RESET_BG, e -> resetBoard());
+        exitButton = createStyledButton("Exit", BUTTON_EXIT_BG, e -> System.exit(0));
 
         buttonPanel.add(startButton);
         buttonPanel.add(stopButton);
         buttonPanel.add(resetButton);
         buttonPanel.add(exitButton);
-        add(buttonPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
+        return buttonPanel;
+    }
+
+    private JButton createStyledButton(String text, Color bgColor, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setFont(BUTTON_FONT);
+        button.setBackground(bgColor);
+        button.setForeground(BUTTON_TEXT_COLOR);
+        button.addActionListener(action);
+        return button;
+    }
+
+    private void resetBoard() {
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                char val = initialBoard[row][col];
+                cells[row][col].setText(val == EMPTY_CELL ? "" : String.valueOf(val));
+            }
+        }
+        setMessage(MESSAGE_WELCOME);
     }
 
     public void updateBoard(char[][] board) {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 char val = board[row][col];
-                cells[row][col].setText(val == '.' ? "" : String.valueOf(val));
+                cells[row][col].setText(val == EMPTY_CELL ? "" : String.valueOf(val));
             }
         }
     }
@@ -90,7 +123,7 @@ public class SudokuVisualizerApp extends JFrame {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 String text = cells[row][col].getText().trim();
-                userBoard[row][col] = (text.isEmpty()) ? '.' : text.charAt(0);
+                userBoard[row][col] = (text.isEmpty()) ? EMPTY_CELL : text.charAt(0);
             }
         }
         return userBoard;
